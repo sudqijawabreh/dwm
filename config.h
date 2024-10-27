@@ -76,6 +76,23 @@ static const Layout layouts[] = {
 	{ NULL,       NULL },
 };
 
+void
+cyclelayout(const Arg *arg) {
+    Layout *l;
+    for (l = (Layout *)layouts; l != selmon->lt[selmon->sellt]; l++);
+    if (arg->i > 0) {
+        if (l == &layouts[LENGTH(layouts) - 1])
+            setlayout(&((Arg) { .v = &layouts[0] }));
+        else
+            setlayout(&((Arg) { .v = l + 1 }));
+    } else {
+        if (l == layouts)
+            setlayout(&((Arg) { .v = &layouts[LENGTH(layouts) - 1] }));
+        else
+            setlayout(&((Arg) { .v = l - 1 }));
+    }
+}
+
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
@@ -131,6 +148,7 @@ static const Key keys[] = {
 	/* { Mod1Mask,                     XK_space,  setlayout,      {0} }, */
 	/* { Mod1Mask|ShiftMask,           XK_space,  togglefloating, {0} }, */
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
+    { MODKEY, XK_n,                 cyclelayout,               {.i = +1} }, // cycle to next layout
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
