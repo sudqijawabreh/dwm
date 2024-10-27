@@ -38,11 +38,13 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp"          , NULL , NULL , 0      , 1 , -1 } ,
-	{ "slack"         , NULL , NULL , 1 << 8 , 0 , -1 } ,
-	{ "discord"       , NULL , NULL , 1 << 8 , 0 , -1 } ,
-	{ "Prospect Mail" , NULL , NULL , 1 << 7 , 0 , -1 } ,
-	{ "zoom"          , NULL , NULL , 1 << 1 , 0 , -1 } ,
+	{ "Gimp"          , NULL , NULL , 0      , 1      , -1 } ,
+	{ "slack"         , NULL , NULL , 1 << 7 , 0      , -1 } ,
+	{ "Slack"         , NULL , NULL , 1 << 7 , 0      , -1 } ,
+	{ "kwalletd5"     , NULL , NULL   , 1 << 7 , 0    , -1 } ,
+	{ "discord"       , NULL , NULL , 1 << 8 , 0      , -1 } ,
+	{ "Prospect Mail" , NULL , NULL , 1 << 7 , 0      , -1 } ,
+	{ "zoom"          , NULL , NULL , 1 << 1 , 0      , -1 } ,
 };
 
 /* layout(s) */
