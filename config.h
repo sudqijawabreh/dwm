@@ -137,6 +137,8 @@ static const Key keys[] = {
     { 0, XF86XK_AudioRaiseVolume, spawn, SHCMD("amixer set Master 5%+ && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") },
     { 0, XF86XK_AudioLowerVolume, spawn, SHCMD("amixer set Master 5%- && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") },
     { 0, XF86XK_AudioMute,        spawn, SHCMD("amixer set Master toggle && notify-send \"Mute: $(amixer get Master | grep -o '\\[on\\|off\\]' | head -1)\"") },
+//{ MODKEY, XK_v, spawn, SHCMD("sh -c 'mpv --no-border  --ontop \"$(dmenu -p Enter\\ YouTube\\ URL: )\"'") },
+    { MODKEY, XK_v, spawn, SHCMD("prime-run mpv --no-border --geometry=100%x100% --ontop $(xclip -o -selection clipboard)") },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
