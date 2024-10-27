@@ -1,5 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
+#include <X11/XF86keysym.h>
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -130,6 +131,12 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD( "maim -s | xclip -selection clipboard -t image/png && notify-send \"Screenshot Copied\" ")},
 	{ MODKEY,                       XK_Up,     spawn,          SHCMD( "amixer set Master 5%+")},
 	{ MODKEY,                       XK_Down,   spawn,          SHCMD( "amixer set Master 5%-")},
+    /* { 0, 123, spawn, SHCMD("amixer set Master 5%+ && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") }, */
+    /* { 0, 122, spawn, SHCMD("amixer set Master 5%- && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") }, */
+    /* { 0, 121, spawn, SHCMD("amixer set Master toggle && notify-send \"Mute: $(amixer get Master | grep -o '\\[on\\|off\\]' | head -1)\"") }, */
+    { 0, XF86XK_AudioRaiseVolume, spawn, SHCMD("amixer set Master 5%+ && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") },
+    { 0, XF86XK_AudioLowerVolume, spawn, SHCMD("amixer set Master 5%- && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") },
+    { 0, XF86XK_AudioMute,        spawn, SHCMD("amixer set Master toggle && notify-send \"Mute: $(amixer get Master | grep -o '\\[on\\|off\\]' | head -1)\"") },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
