@@ -57,7 +57,7 @@ static const Rule rules[] = {
 	{ "kwalletd5"     , NULL , NULL   , 1 << 7 , 0    , -1 } ,
 	{ "discord"       , NULL , NULL , 1 << 8 , 0      , -1 } ,
 	{ "Prospect Mail" , NULL , NULL , 1 << 7 , 0      , -1 } ,
-	{ "zoom"          , NULL , NULL , 1 << 1 , 0      , -1 } ,
+	{ "zoom"          , NULL , NULL , 1 << 3 , 0      , 1 } ,
 };
 
 /* layout(s) */
