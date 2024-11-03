@@ -971,7 +971,7 @@ focusdir(const Arg *arg)
 		if (!next)
 			next = s->mon->clients;
 
-		if (!ISVISIBLE(c) || c->isfloating != isfloating) // || HIDDEN(c)
+		if (!ISVISIBLE(c)) // || HIDDEN(c)
 			continue;
 
 		switch (arg->i) {
