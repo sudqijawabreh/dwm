@@ -173,6 +173,10 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+    /* Keybindings for dunst notifications */
+    { ControlMask|ShiftMask,        XK_space,  spawn,          SHCMD("dunstctl close") },
+    { ControlMask|ShiftMask,        XK_d,      spawn,          SHCMD("dunstctl close-all") },
+    { ControlMask|ShiftMask,        XK_Return, spawn,          SHCMD("dunstctl action") },
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD( "maim -s | xclip -selection clipboard -t image/png && notify-send \"Screenshot Copied\" ")},
 	{ MODKEY,                       XK_Up,     spawn,          SHCMD( "amixer set Master 5%+")},
 	{ MODKEY,                       XK_Down,   spawn,          SHCMD( "amixer set Master 5%-")},
