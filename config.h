@@ -178,11 +178,8 @@ static const Key keys[] = {
     { ControlMask|ShiftMask,        XK_d,      spawn,          SHCMD("dunstctl close-all") },
     { ControlMask|ShiftMask,        XK_Return, spawn,          SHCMD("dunstctl action") },
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD( "maim -s | xclip -selection clipboard -t image/png && notify-send \"Screenshot Copied\" ")},
-	{ MODKEY,                       XK_Up,     spawn,          SHCMD( "amixer set Master 5%+")},
-	{ MODKEY,                       XK_Down,   spawn,          SHCMD( "amixer set Master 5%-")},
-    /* { 0, 123, spawn, SHCMD("amixer set Master 5%+ && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") }, */
-    /* { 0, 122, spawn, SHCMD("amixer set Master 5%- && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") }, */
-    /* { 0, 121, spawn, SHCMD("amixer set Master toggle && notify-send \"Mute: $(amixer get Master | grep -o '\\[on\\|off\\]' | head -1)\"") }, */
+	{ MODKEY,                       XK_Up,     spawn,          SHCMD( "amixer set Master 5%+ && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"")},
+	{ MODKEY,                       XK_Down,   spawn,          SHCMD( "amixer set Master 5%- && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"")},
     { 0, XF86XK_AudioRaiseVolume, spawn, SHCMD("amixer set Master 5%+ && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") },
     { 0, XF86XK_AudioLowerVolume, spawn, SHCMD("amixer set Master 5%- && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") },
     { 0, XF86XK_AudioMute,        spawn, SHCMD("amixer set Master toggle && notify-send \"Mute: $(amixer get Master | grep -o '\\[on\\|off\\]' | head -1)\"") },
