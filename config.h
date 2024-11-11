@@ -122,6 +122,9 @@ cyclelayout(const Arg *arg) {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", "-e", "zsh" };
+static const char *increaseVolume[]  = { "/home/sudqi/dotfiles/scripts/increaseVolume.sh", NULL};
+static const char *decreaseVolume[]  = { "/home/sudqi/dotfiles/scripts/decreaseVolume.sh", NULL};
+static const char *MuteVolume[]  = { "/home/sudqi/dotfiles/scripts/MuteVolume.sh", NULL};
 
 static Keychord *keychords[] = {
 	/* modifier                     key        function        argument */
@@ -180,11 +183,11 @@ static Keychord *keychords[] = {
     &((Keychord){1,  {{ControlMask|ShiftMask,        XK_d}},      spawn,          SHCMD("dunstctl close-all") }),
     &((Keychord){1,  {{ControlMask|ShiftMask,        XK_Return}}, spawn,          SHCMD("dunstctl action && dunstctl close") }),
 	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_s}},      spawn,          SHCMD( "maim -s | xclip -selection clipboard -t image/png && notify-send \"Screenshot Copied\" ")}),
-	&((Keychord){1,  {{MODKEY,                       XK_Up}},     spawn,          SHCMD( "amixer set Master 5%+ && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"")}),
-	&((Keychord){1,  {{MODKEY,                       XK_Down}},   spawn,          SHCMD( "amixer set Master 5%- && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"")}),
-    &((Keychord){1,  {{0, XF86XK_AudioRaiseVolume}}, spawn, SHCMD("amixer set Master 5%+ && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") }),
-    &((Keychord){1,  {{0, XF86XK_AudioLowerVolume}}, spawn, SHCMD("amixer set Master 5%- && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") }),
-    &((Keychord){1,  {{0, XF86XK_AudioMute}},        spawn, SHCMD("amixer set Master toggle && notify-send \"Mute: $(amixer get Master | grep -o '\\[on\\|off\\]' | head -1)\"") }),
+	&((Keychord){1,  {{MODKEY,                       XK_Up}},     spawn,          {.v = increaseVolume} }),
+	&((Keychord){1,  {{MODKEY,                       XK_Down}},   spawn,        {.v = decreaseVolume} }),
+    &((Keychord){1,  {{0, XF86XK_AudioRaiseVolume}}, spawn, {.v = increaseVolume} }),
+    &((Keychord){1,  {{0, XF86XK_AudioLowerVolume}}, spawn, {.v = decreaseVolume} }),
+    &((Keychord){1,  {{0, XF86XK_AudioMute}},        spawn, {.v = MuteVolume} }),
     //{ MODKEY, XK_v, spawn, SHCMD("sh -c 'mpv --no-border  --ontop \"$(dmenu -p Enter\\ YouTube\\ URL: )\"'") }),
     &((Keychord){1,  {{MODKEY, XK_v}}, spawn, SHCMD("prime-run mpv --no-border --geometry=100%x100% --ontop $(xclip -o -selection clipboard)") }),
 	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_q}},      quit,           {0} }),
