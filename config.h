@@ -50,14 +50,15 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp"          , NULL , NULL , 0      , 1      , -1 } ,
-	{ "slack"         , NULL , NULL , 1 << 7 , 0      , -1 } ,
-	{ "Slack"         , NULL , NULL , 1 << 7 , 0      , -1 } ,
-	{ "kwalletd5"     , NULL , NULL   , 1 << 7 , 0    , -1 } ,
-	{ "discord"       , NULL , NULL , 1 << 8 , 0      , -1 } ,
-	{ "Prospect Mail" , NULL , NULL , 1 << 7 , 0      , -1 } ,
-	{ "zoom"          , NULL , NULL , 1 << 3 , 0      , 1 } ,
+	/* class          , instance , title , tags mask , isfloating , monitor */
+	{ "Gimp"          , NULL     , NULL  , 0         , 1          , -1 }       ,
+	{ "slack"         , NULL     , NULL  , 1 << 7    , 0          , -1 }       ,
+	{ "Slack"         , NULL     , NULL  , 1 << 7    , 0          , -1 }       ,
+	{ "kwalletd5"     , NULL     , NULL  , 1 << 7    , 0          , -1 }       ,
+	{ "discord"       , NULL     , NULL  , 1 << 8    , 0          , -1 }       ,
+	{ "Prospect Mail" , NULL     , NULL  , 1 << 7    , 0          , -1 }       ,
+	{ "zoom"          , NULL     , NULL  , 1 << 3    , 1          , -1 }        ,
+	{ "qutebrowser"   , NULL     , NULL  , 1 << 2    , 0          , -1 }        ,
 };
 
 /* layout(s) */
@@ -108,11 +109,11 @@ cyclelayout(const Arg *arg) {
 
 /* key definitions */
 #define MODKEY Mod4Mask
-#define TAGKEYS(KEY,TAG) \
-	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
+#define TAGKEYS(KEY,TAG)                                                                                               \
+       &((Keychord){1, {{MODKEY, KEY}},                                        view,           {.ui = 1 << TAG} }), \
+       &((Keychord){1, {{MODKEY|ControlMask, KEY}},                            toggleview,     {.ui = 1 << TAG} }), \
+       &((Keychord){1, {{MODKEY|ShiftMask, KEY}},                              tag,            {.ui = 1 << TAG} }), \
+       &((Keychord){1, {{MODKEY|ControlMask|ShiftMask, KEY}},                  toggletag,      {.ui = 1 << TAG} }),
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -122,69 +123,71 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", "-e", "zsh" };
 
-static const Key keys[] = {
+static Keychord *keychords[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
+	&((Keychord){1,  {{MODKEY,                       XK_p}},      spawn,          {.v = dmenucmd } }),
+	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_Return}}, spawn,          {.v = termcmd } }),
+	&((Keychord){1,  {{MODKEY,                       XK_b}},      togglebar,      {0} }),
     // not used for now because I'm using focusdir
 	/* { MODKEY,                       XK_j,      focusstack,     {.i = +1 } }, */
 	/* { MODKEY,                       XK_k,      focusstack,     {.i = -1 } }, */
-	{ MODKEY,                       XK_h,      focusdir,       {.i = 0 } }, // left
-	{ MODKEY,                       XK_l,      focusdir,       {.i = 1 } }, // right
-	{ MODKEY,                       XK_k,      focusdir,       {.i = 2 } }, // up
-	{ MODKEY,                       XK_j,      focusdir,       {.i = 3 } }, // down
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_h,      setmfact,       {.f = -0.05} },
-	{ MODKEY|ShiftMask,             XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY|ShiftMask,             XK_j,      setcfact,       {.f = +0.25} },
-	{ MODKEY|ShiftMask,             XK_k,      setcfact,       {.f = -0.25} },
-	{ MODKEY|ShiftMask,             XK_o,      setcfact,       {.f =  0.00} },
-	{ MODKEY,                       XK_Return, zoom,           {0} },
-	{ MODKEY|Mod1Mask,              XK_u,      incrgaps,       {.i = +1 } },
-	{ MODKEY|Mod1Mask|ShiftMask,    XK_u,      incrgaps,       {.i = -1 } },
-	{ MODKEY|Mod1Mask,              XK_i,      incrigaps,      {.i = +1 } },
-	{ MODKEY|Mod1Mask|ShiftMask,    XK_i,      incrigaps,      {.i = -1 } },
-	{ MODKEY|Mod1Mask,              XK_o,      incrogaps,      {.i = +1 } },
-	{ MODKEY|Mod1Mask|ShiftMask,    XK_o,      incrogaps,      {.i = -1 } },
-	{ MODKEY|Mod1Mask,              XK_6,      incrihgaps,     {.i = +1 } },
-	{ MODKEY|Mod1Mask|ShiftMask,    XK_6,      incrihgaps,     {.i = -1 } },
-	{ MODKEY|Mod1Mask,              XK_7,      incrivgaps,     {.i = +1 } },
-	{ MODKEY|Mod1Mask|ShiftMask,    XK_7,      incrivgaps,     {.i = -1 } },
-	{ MODKEY|Mod1Mask,              XK_8,      incrohgaps,     {.i = +1 } },
-	{ MODKEY|Mod1Mask|ShiftMask,    XK_8,      incrohgaps,     {.i = -1 } },
-	{ MODKEY|Mod1Mask,              XK_9,      incrovgaps,     {.i = +1 } },
-	{ MODKEY|Mod1Mask|ShiftMask,    XK_9,      incrovgaps,     {.i = -1 } },
-	{ MODKEY|Mod1Mask,              XK_0,      togglegaps,     {0} },
-	{ MODKEY|Mod1Mask|ShiftMask,    XK_0,      defaultgaps,    {0} },
-	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY|ShiftMask,             XK_m,      setlayout,      {.v = &layouts[12]} },
+	&((Keychord){1,  {{MODKEY,                       XK_h}},      focusdir,       {.i = 0 } }), // left
+	&((Keychord){1,  {{MODKEY,                       XK_l}},      focusdir,       {.i = 1 } }), // right
+	&((Keychord){1,  {{MODKEY,                       XK_k}},      focusdir,       {.i = 2 } }), // up
+	&((Keychord){1,  {{MODKEY,                       XK_j}},      focusdir,       {.i = 3 } }), // down
+	&((Keychord){1,  {{MODKEY,                       XK_i}},      incnmaster,     {.i = +1 } }),
+	&((Keychord){1,  {{MODKEY,                       XK_d}},      incnmaster,     {.i = -1 } }),
+	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_h}},      setmfact,       {.f = -0.05} }),
+	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_l}},      setmfact,       {.f = +0.05} }),
+	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_j}},      setcfact,       {.f = +0.25} }),
+	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_k}},      setcfact,       {.f = -0.25} }),
+	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_o}},      setcfact,       {.f =  0.00} }),
+	&((Keychord){1,  {{MODKEY,                       XK_Return}}, zoom,           {0} }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask,              XK_u}},      incrgaps,       {.i = +1 } }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask|ShiftMask,    XK_u}},      incrgaps,       {.i = -1 } }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask,              XK_i}},      incrigaps,      {.i = +1 } }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask|ShiftMask,    XK_i}},      incrigaps,      {.i = -1 } }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask,              XK_o}},      incrogaps,      {.i = +1 } }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask|ShiftMask,    XK_o}},      incrogaps,      {.i = -1 } }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask,              XK_6}},      incrihgaps,     {.i = +1 } }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask|ShiftMask,    XK_6}},      incrihgaps,     {.i = -1 } }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask,              XK_7}},      incrivgaps,     {.i = +1 } }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask|ShiftMask,    XK_7}},      incrivgaps,     {.i = -1 } }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask,              XK_8}},      incrohgaps,     {.i = +1 } }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask|ShiftMask,    XK_8}},      incrohgaps,     {.i = -1 } }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask,              XK_9}},      incrovgaps,     {.i = +1 } }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask|ShiftMask,    XK_9}},      incrovgaps,     {.i = -1 } }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask,              XK_0}},      togglegaps,     {0} }),
+	&((Keychord){1,  {{MODKEY|Mod1Mask|ShiftMask,    XK_0}},      defaultgaps,    {0} }),
+	&((Keychord){1,  {{MODKEY,                       XK_Tab}},    view,           {0} }),
+	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_c}},      killclient,     {0} }),
+	&((Keychord){1,  {{MODKEY,                       XK_t}},      setlayout,      {.v = &layouts[0]} }),
+	&((Keychord){1,  {{MODKEY,                       XK_f}},      setlayout,      {.v = &layouts[1]} }),
+	&((Keychord){1,  {{MODKEY,                       XK_m}},      setlayout,      {.v = &layouts[2]} }),
+	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_m}},      setlayout,      {.v = &layouts[12]} }),
 	/* { Mod1Mask,                     XK_space,  setlayout,      {0} }, */
 	/* { Mod1Mask|ShiftMask,           XK_space,  togglefloating, {0} }, */
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-    { MODKEY, XK_n,                 cyclelayout,               {.i = +1} }, // cycle to next layout
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+	&((Keychord){1,  {{MODKEY,                       XK_0}},      view,           {.ui = ~0 } }),
+    &((Keychord){1,  {{MODKEY, XK_n}},                 cyclelayout,               {.i = +1} }), // cycle to next layout
+	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_0}},      tag,            {.ui = ~0 } }),
+	&((Keychord){1,  {{MODKEY,                       XK_comma}},  focusmon,       {.i = -1 } }),
+	&((Keychord){1,  {{MODKEY,                       XK_period}}, focusmon,       {.i = +1 } }),
+	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_comma}},  tagmon,         {.i = -1 } }),
+	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_period}}, tagmon,         {.i = +1 } }),
     /* Keybindings for dunst notifications */
-    { ControlMask|ShiftMask,        XK_space,  spawn,          SHCMD("dunstctl close") },
-    { ControlMask|ShiftMask,        XK_d,      spawn,          SHCMD("dunstctl close-all") },
-    { ControlMask|ShiftMask,        XK_Return, spawn,          SHCMD("dunstctl action && dunstctl close") },
-	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD( "maim -s | xclip -selection clipboard -t image/png && notify-send \"Screenshot Copied\" ")},
-	{ MODKEY,                       XK_Up,     spawn,          SHCMD( "amixer set Master 5%+ && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"")},
-	{ MODKEY,                       XK_Down,   spawn,          SHCMD( "amixer set Master 5%- && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"")},
-    { 0, XF86XK_AudioRaiseVolume, spawn, SHCMD("amixer set Master 5%+ && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") },
-    { 0, XF86XK_AudioLowerVolume, spawn, SHCMD("amixer set Master 5%- && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") },
-    { 0, XF86XK_AudioMute,        spawn, SHCMD("amixer set Master toggle && notify-send \"Mute: $(amixer get Master | grep -o '\\[on\\|off\\]' | head -1)\"") },
-//{ MODKEY, XK_v, spawn, SHCMD("sh -c 'mpv --no-border  --ontop \"$(dmenu -p Enter\\ YouTube\\ URL: )\"'") },
-    { MODKEY, XK_v, spawn, SHCMD("prime-run mpv --no-border --geometry=100%x100% --ontop $(xclip -o -selection clipboard)") },
+    &((Keychord){1,  {{ControlMask|ShiftMask,        XK_u}},      spawn,          SHCMD("dunstctl history-pop") }),
+    &((Keychord){1,  {{ControlMask|ShiftMask,        XK_space}},  spawn,          SHCMD("dunstctl close") }),
+    &((Keychord){1,  {{ControlMask|ShiftMask,        XK_d}},      spawn,          SHCMD("dunstctl close-all") }),
+    &((Keychord){1,  {{ControlMask|ShiftMask,        XK_Return}}, spawn,          SHCMD("dunstctl action && dunstctl close") }),
+	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_s}},      spawn,          SHCMD( "maim -s | xclip -selection clipboard -t image/png && notify-send \"Screenshot Copied\" ")}),
+	&((Keychord){1,  {{MODKEY,                       XK_Up}},     spawn,          SHCMD( "amixer set Master 5%+ && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"")}),
+	&((Keychord){1,  {{MODKEY,                       XK_Down}},   spawn,          SHCMD( "amixer set Master 5%- && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"")}),
+    &((Keychord){1,  {{0, XF86XK_AudioRaiseVolume}}, spawn, SHCMD("amixer set Master 5%+ && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") }),
+    &((Keychord){1,  {{0, XF86XK_AudioLowerVolume}}, spawn, SHCMD("amixer set Master 5%- && notify-send \"Volume: $(amixer get Master | grep -o '[0-9]*%' | head -1)\"") }),
+    &((Keychord){1,  {{0, XF86XK_AudioMute}},        spawn, SHCMD("amixer set Master toggle && notify-send \"Mute: $(amixer get Master | grep -o '\\[on\\|off\\]' | head -1)\"") }),
+    //{ MODKEY, XK_v, spawn, SHCMD("sh -c 'mpv --no-border  --ontop \"$(dmenu -p Enter\\ YouTube\\ URL: )\"'") }),
+    &((Keychord){1,  {{MODKEY, XK_v}}, spawn, SHCMD("prime-run mpv --no-border --geometry=100%x100% --ontop $(xclip -o -selection clipboard)") }),
+	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_q}},      quit,           {0} }),
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -194,7 +197,6 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 };
 
 /* button definitions */
