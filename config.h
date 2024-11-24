@@ -54,10 +54,11 @@ static const Rule rules[] = {
 	/* class          , instance , title , tags mask , isfloating ,  isterminal  noswallow  monitor */
 	{ "Gimp"          , NULL     , NULL  , 0         , 1          ,  0,           0,        -1 }       ,
 	{ "slack"         , NULL     , NULL  , 1 << 7    , 0          ,  0,          -1,        -1 }       ,
-	{ "Slack"         , NULL     , NULL  , 1 << 7    , 0          ,  1,           0,        -1 }       ,
+	{ "Slack"         , NULL     , NULL  , 1 << 7    , 0          ,  0,           0,        -1 }       ,
 	{ "kwalletd5"     , NULL     , NULL  , 1 << 7    , 0          ,  0,           1,        -1 }       ,
 	{ "discord"       , NULL     , NULL  , 1 << 8    , 0          ,  0,           0,        -1 }       ,
 	{ "Prospect Mail" , NULL     , NULL  , 1 << 7    , 0          ,  0,           0,        -1 }       ,
+	{ "St"            , NULL     , NULL  , 0         , 0          ,  1,           0,        -1 }       ,
 	{ "qutebrowser"   , NULL     , NULL  , 1 << 2    , 0          ,  0,           0,        -1 }       ,
 };
 
@@ -122,6 +123,9 @@ cyclelayout(const Arg *arg) {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", "-e", "zsh" };
+static const char *OpenJira[]  = { "/home/sudqi/dotfiles/scripts/Open.sh", NULL};
+static const char *OpenNvim[]  = { "st", "-e", "nvim"};
+static const char *goToWindow[]  = { "/home/sudqi/dotfiles/scripts/goto.sh", NULL};
 static const char *increaseVolume[]  = { "/home/sudqi/dotfiles/scripts/increaseVolume.sh", NULL};
 static const char *decreaseVolume[]  = { "/home/sudqi/dotfiles/scripts/decreaseVolume.sh", NULL};
 static const char *MuteVolume[]  = { "/home/sudqi/dotfiles/scripts/MuteVolume.sh", NULL};
@@ -130,6 +134,7 @@ static Keychord *keychords[] = {
 	/* modifier                     key        function        argument */
 	&((Keychord){1,  {{MODKEY,                       XK_p}},      spawn,          {.v = dmenucmd } }),
 	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_Return}}, spawn,          {.v = termcmd } }),
+    &((Keychord){2, {{MODKEY, XK_e},             {MODKEY, XK_e}}, spawn,          {.v = termcmd } }),
 	&((Keychord){1,  {{MODKEY,                       XK_b}},      togglebar,      {0} }),
     // not used for now because I'm using focusdir
 	/* { MODKEY,                       XK_j,      focusstack,     {.i = +1 } }, */
@@ -177,6 +182,10 @@ static Keychord *keychords[] = {
 	&((Keychord){1,  {{MODKEY,                       XK_period}}, focusmon,       {.i = +1 } }),
 	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_comma}},  tagmon,         {.i = -1 } }),
 	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_period}}, tagmon,         {.i = +1 } }),
+    &((Keychord){2,  {{MODKEY,XK_o},                 {0, XK_w} }, spawn,          {.v = goToWindow} }),
+    /* &((Keychord){1,  {{MODKEY,                       XK_g}},      spawn,          {.v = goToWindow} }), */
+    &((Keychord){1,  {{MODKEY,                       XK_w}},     spawn,          {.v = OpenJira} }),
+    &((Keychord){2,  {{MODKEY,XK_o},                {0, XK_n}},   spawn,          {.v = OpenNvim} }),
     /* Keybindings for dunst notifications */
     &((Keychord){1,  {{ControlMask|ShiftMask,        XK_u}},      spawn,          SHCMD("dunstctl history-pop") }),
     &((Keychord){1,  {{ControlMask|ShiftMask,        XK_space}},  spawn,          SHCMD("dunstctl close") }),
@@ -189,7 +198,8 @@ static Keychord *keychords[] = {
     &((Keychord){1,  {{0, XF86XK_AudioLowerVolume}}, spawn, {.v = decreaseVolume} }),
     &((Keychord){1,  {{0, XF86XK_AudioMute}},        spawn, {.v = MuteVolume} }),
     //{ MODKEY, XK_v, spawn, SHCMD("sh -c 'mpv --no-border  --ontop \"$(dmenu -p Enter\\ YouTube\\ URL: )\"'") }),
-    &((Keychord){1,  {{MODKEY, XK_v}}, spawn, SHCMD("prime-run mpv --no-border --geometry=100%x100% --ontop $(xclip -o -selection clipboard)") }),
+    &((Keychord){1,  {{MODKEY, XK_v}},               spawn, SHCMD("clipcat-menu") }),
+    //&((Keychord){1,  {{MODKEY, XK_v}}, spawn, SHCMD("prime-run mpv --no-border --geometry=100%x100% --ontop $(xclip -o -selection clipboard)") }),
 	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_q}},      quit,           {0} }),
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
