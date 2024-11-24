@@ -4,6 +4,7 @@
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
+static const int swallowfloating    = 1;        /* 1 means swallow floating windows by default */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -50,15 +51,14 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class          , instance , title , tags mask , isfloating , monitor */
-	{ "Gimp"          , NULL     , NULL  , 0         , 1          , -1 }       ,
-	{ "slack"         , NULL     , NULL  , 1 << 7    , 0          , -1 }       ,
-	{ "Slack"         , NULL     , NULL  , 1 << 7    , 0          , -1 }       ,
-	{ "kwalletd5"     , NULL     , NULL  , 1 << 7    , 0          , -1 }       ,
-	{ "discord"       , NULL     , NULL  , 1 << 8    , 0          , -1 }       ,
-	{ "Prospect Mail" , NULL     , NULL  , 1 << 7    , 0          , -1 }       ,
-	{ "zoom"          , NULL     , NULL  , 1 << 3    , 1          , -1 }        ,
-	{ "qutebrowser"   , NULL     , NULL  , 1 << 2    , 0          , -1 }        ,
+	/* class          , instance , title , tags mask , isfloating ,  isterminal  noswallow  monitor */
+	{ "Gimp"          , NULL     , NULL  , 0         , 1          ,  0,           0,        -1 }       ,
+	{ "slack"         , NULL     , NULL  , 1 << 7    , 0          ,  0,          -1,        -1 }       ,
+	{ "Slack"         , NULL     , NULL  , 1 << 7    , 0          ,  1,           0,        -1 }       ,
+	{ "kwalletd5"     , NULL     , NULL  , 1 << 7    , 0          ,  0,           1,        -1 }       ,
+	{ "discord"       , NULL     , NULL  , 1 << 8    , 0          ,  0,           0,        -1 }       ,
+	{ "Prospect Mail" , NULL     , NULL  , 1 << 7    , 0          ,  0,           0,        -1 }       ,
+	{ "qutebrowser"   , NULL     , NULL  , 1 << 2    , 0          ,  0,           0,        -1 }       ,
 };
 
 /* layout(s) */
