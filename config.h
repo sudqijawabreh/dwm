@@ -126,6 +126,7 @@ static const char *termcmd[]  = { "st", "-e", "zsh" };
 static const char *OpenJira[]  = { "/home/sudqi/dotfiles/scripts/Open.sh", NULL};
 static const char *OpenNvim[]  = { "st", "-e", "nvim"};
 static const char *goToWindow[]  = { "/home/sudqi/dotfiles/scripts/goto.sh", NULL};
+static const char *goToZoom[]  = { "/home/sudqi/dotfiles/scripts/goToZoom.sh", NULL};
 static const char *increaseVolume[]  = { "/home/sudqi/dotfiles/scripts/increaseVolume.sh", NULL};
 static const char *decreaseVolume[]  = { "/home/sudqi/dotfiles/scripts/decreaseVolume.sh", NULL};
 static const char *MuteVolume[]  = { "/home/sudqi/dotfiles/scripts/MuteVolume.sh", NULL};
@@ -192,6 +193,7 @@ static Keychord *keychords[] = {
     &((Keychord){1,  {{ControlMask|ShiftMask,        XK_d}},      spawn,          SHCMD("dunstctl close-all") }),
     &((Keychord){1,  {{ControlMask|ShiftMask,        XK_Return}}, spawn,          SHCMD("dunstctl action && dunstctl close") }),
 	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_s}},      spawn,          SHCMD( "maim -s | xclip -selection clipboard -t image/png && notify-send \"Screenshot Copied\" ")}),
+	&((Keychord){1,  {{MODKEY,                       XK_z}},      spawn,          {.v = goToZoom} }),
 	&((Keychord){1,  {{MODKEY,                       XK_Up}},     spawn,          {.v = increaseVolume} }),
 	&((Keychord){1,  {{MODKEY,                       XK_Down}},   spawn,        {.v = decreaseVolume} }),
     &((Keychord){1,  {{0, XF86XK_AudioRaiseVolume}}, spawn, {.v = increaseVolume} }),
