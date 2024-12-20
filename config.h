@@ -130,6 +130,8 @@ static const char *goToZoom[]  = { "/home/sudqi/dotfiles/scripts/goToZoom.sh", N
 static const char *increaseVolume[]  = { "/home/sudqi/dotfiles/scripts/increaseVolume.sh", NULL};
 static const char *decreaseVolume[]  = { "/home/sudqi/dotfiles/scripts/decreaseVolume.sh", NULL};
 static const char *MuteVolume[]  = { "/home/sudqi/dotfiles/scripts/MuteVolume.sh", NULL};
+static const char *increaseBrightness[]  = { "/home/sudqi/dotfiles/scripts/changeScreenBrightness.sh", "10%+"};
+static const char *decreaseBrightness[]  = { "/home/sudqi/dotfiles/scripts/changeScreenBrightness.sh", "10%-"};
 
 static Keychord *keychords[] = {
 	/* modifier                     key        function        argument */
@@ -196,6 +198,8 @@ static Keychord *keychords[] = {
 	&((Keychord){1,  {{MODKEY,                       XK_z}},      spawn,          {.v = goToZoom} }),
 	&((Keychord){1,  {{MODKEY,                       XK_Up}},     spawn,          {.v = increaseVolume} }),
 	&((Keychord){1,  {{MODKEY,                       XK_Down}},   spawn,        {.v = decreaseVolume} }),
+	&((Keychord){1,  {{MODKEY,                       XK_Right}},   spawn,          {.v = increaseBrightness} }),
+	&((Keychord){1,  {{MODKEY,                       XK_Left}},   spawn,        {.v = decreaseBrightness} }),
     &((Keychord){1,  {{0, XF86XK_AudioRaiseVolume}}, spawn, {.v = increaseVolume} }),
     &((Keychord){1,  {{0, XF86XK_AudioLowerVolume}}, spawn, {.v = decreaseVolume} }),
     &((Keychord){1,  {{0, XF86XK_AudioMute}},        spawn, {.v = MuteVolume} }),
