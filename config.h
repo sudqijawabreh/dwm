@@ -132,12 +132,14 @@ static const char *decreaseVolume[]  = { "/home/sudqi/dotfiles/scripts/decreaseV
 static const char *MuteVolume[]  = { "/home/sudqi/dotfiles/scripts/MuteVolume.sh", NULL};
 static const char *increaseBrightness[]  = { "/home/sudqi/dotfiles/scripts/changeScreenBrightness.sh", "10%+"};
 static const char *decreaseBrightness[]  = { "/home/sudqi/dotfiles/scripts/changeScreenBrightness.sh", "10%-"};
+static const char *sleep[]  = { "systemctl", "suspend" };
 
 static Keychord *keychords[] = {
 	/* modifier                     key        function        argument */
 	&((Keychord){1,  {{MODKEY,                       XK_p}},      spawn,          {.v = dmenucmd } }),
 	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_Return}}, spawn,          {.v = termcmd } }),
     &((Keychord){2, {{MODKEY, XK_e},             {MODKEY, XK_e}}, spawn,          {.v = termcmd } }),
+    &((Keychord){2, {{MODKEY, XK_e},             {MODKEY, XK_s}},  spawn,          {.v = sleep } }),
 	&((Keychord){1,  {{MODKEY,                       XK_b}},      togglebar,      {0} }),
     // not used for now because I'm using focusdir
 	/* { MODKEY,                       XK_j,      focusstack,     {.i = +1 } }, */
