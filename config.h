@@ -125,6 +125,10 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "st", "-e", "zsh" };
 static const char *OpenJira[]  = { "/home/sudqi/dotfiles/scripts/Open.sh", NULL};
 static const char *OpenNvim[]  = { "st", "-e", "nvim"};
+// Shouldn't be needed. I'm using autorandr now
+static const char *SetDisplay[]  = { "/home/sudqi/dotfiles/scripts/display_set.sh", NULL};
+static const char *ExtendLeft[]  = { "/home/sudqi/dotfiles/scripts/display_set.sh" , "-l"};
+static const char *ExtendRight[]  = { "/home/sudqi/dotfiles/scripts/display_set.sh", "-r"};
 static const char *goToWindow[]  = { "/home/sudqi/dotfiles/scripts/goto.sh", NULL};
 static const char *goToZoom[]  = { "/home/sudqi/dotfiles/scripts/goToZoom.sh", NULL};
 static const char *increaseVolume[]  = { "/home/sudqi/dotfiles/scripts/increaseVolume.sh", NULL};
@@ -132,14 +136,21 @@ static const char *decreaseVolume[]  = { "/home/sudqi/dotfiles/scripts/decreaseV
 static const char *MuteVolume[]  = { "/home/sudqi/dotfiles/scripts/MuteVolume.sh", NULL};
 static const char *increaseBrightness[]  = { "/home/sudqi/dotfiles/scripts/changeScreenBrightness.sh", "10%+"};
 static const char *decreaseBrightness[]  = { "/home/sudqi/dotfiles/scripts/changeScreenBrightness.sh", "10%-"};
-static const char *sleep[]  = { "systemctl", "suspend" };
+static const char *Sleep[]  = { "systemctl", "suspend", NULL};
+static const char *lock[]  = { "slock"};
+static const char *ConnectToVpn[]  = { "/home/sudqi/dotfiles/scripts/connect_vpn.sh" , "sjawabreh"};
 
 static Keychord *keychords[] = {
 	/* modifier                     key        function        argument */
-	&((Keychord){1,  {{MODKEY,                       XK_p}},      spawn,          {.v = dmenucmd } }),
-	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_Return}}, spawn,          {.v = termcmd } }),
-    &((Keychord){2, {{MODKEY, XK_e},             {MODKEY, XK_e}}, spawn,          {.v = termcmd } }),
-    &((Keychord){2, {{MODKEY, XK_e},             {MODKEY, XK_s}},  spawn,          {.v = sleep } }),
+	&((Keychord){1,  {{MODKEY,                       XK_p}},       spawn,          {.v = dmenucmd } }),
+	&((Keychord){1,  {{MODKEY|ShiftMask,             XK_Return}},  spawn,          {.v = termcmd } }),
+    &((Keychord){2, {{MODKEY, XK_e},             {MODKEY, XK_e}},  spawn,          {.v = OpenNvim } }),
+    &((Keychord){2, {{MODKEY, XK_e},             {MODKEY, XK_p}},  spawn,          {.v = SetDisplay } }),
+    &((Keychord){2, {{MODKEY, XK_e},             {MODKEY, XK_r}},  spawn,          {.v = ExtendRight} }),
+    &((Keychord){2, {{MODKEY, XK_e},             {MODKEY, XK_h}},  spawn,          {.v = ExtendLeft } }),
+    &((Keychord){2, {{MODKEY, XK_e},             {MODKEY, XK_v}},  spawn,          {.v = ConnectToVpn } }),
+    &((Keychord){2, {{MODKEY, XK_e},             {MODKEY, XK_s}},  spawn,          {.v = Sleep } }),
+    &((Keychord){2, {{MODKEY, XK_e},             {MODKEY, XK_l}},  spawn,          {.v = lock } }),
 	&((Keychord){1,  {{MODKEY,                       XK_b}},      togglebar,      {0} }),
     // not used for now because I'm using focusdir
 	/* { MODKEY,                       XK_j,      focusstack,     {.i = +1 } }, */
